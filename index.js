@@ -5,10 +5,10 @@ const mockList = require("./mock/index");
 const app = new koa();
 const router = new Router();
 
-async function getRes(fn) {
+async function getRes(fn, ctx) {
 	return new Promise((resolve) => {
 		setTimeout(() => {
-			resolve(fn());
+			resolve(fn(ctx));
 		}, 1000);
 	});
 }
@@ -16,7 +16,7 @@ async function getRes(fn) {
 mockList.forEach((item) => {
 	const { url, method, response } = item;
 	router[method](url, async (ctx) => {
-		const res = await getRes(response);
+		const res = await getRes(response, ctx);
 		ctx.body = res;
 	});
 });
